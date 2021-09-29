@@ -920,7 +920,13 @@ export function insertNode({
   });
 
   if (!('insertedTreeIndex' in insertResult)) {
-    throw new Error('No suitable position found to insert.');
+    // https://github.com/frontend-collective/react-sortable-tree/issues/259
+    return {
+      treeData: [newNode],
+      treeIndex: 0,
+      path: [getNodeKey({ node: newNode, treeIndex: 0 })],
+      parentNode: null,
+    };
   }
 
   const treeIndex = insertResult.insertedTreeIndex;
