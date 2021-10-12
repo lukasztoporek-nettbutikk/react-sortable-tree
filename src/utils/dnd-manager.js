@@ -143,11 +143,7 @@ export default class DndManager {
           minimumTreeIndex: dropTargetProps.listIndex,
           expandParent: true,
         });
-      } catch (error) {
-        // temporary fix
-        // https://github.com/frontend-collective/react-sortable-tree/issues/259
-        return false
-      }
+
 
       return this.customCanDrop({
         node,
@@ -158,6 +154,16 @@ export default class DndManager {
         nextParent: addedResult.parentNode,
         nextTreeIndex: addedResult.treeIndex,
       });
+
+      } catch (error) {
+        
+        // eslint-disable-next-line no-console
+        console.log(error)
+        
+        // temporary fix
+        // https://github.com/frontend-collective/react-sortable-tree/issues/259
+        return false
+      }
     }
 
     return true;
