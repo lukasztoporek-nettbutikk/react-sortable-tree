@@ -217,15 +217,8 @@ export default class DndManager {
           depth: this.getTargetDepth(dropTargetProps, monitor, component),
         };
 
-        try {
-          this.drop(result);
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log('wrapTarget - drop - error');
-          // eslint-disable-next-line no-console
-          console.log(error);
-        }
-        
+        this.drop(result);
+
         return result;
       },
 
@@ -263,12 +256,22 @@ export default class DndManager {
 
     function nodeDropTargetPropInjection(connect, monitor) {
       const dragged = monitor.getItem();
-      return {
-        connectDropTarget: connect.dropTarget(),
-        isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
-        draggedNode: dragged ? dragged.node : null,
-      };
+      try {
+        return {
+          connectDropTarget: connect.dropTarget(),
+          isOver: monitor.isOver(),
+          canDrop: monitor.canDrop(),
+          draggedNode: dragged ? dragged.node : null,
+        };
+      } catch (error) {
+        // temporary fix for: Uncaught Error: Invariant Violation: Expected to find a valid target
+        return {
+          connectDropTarget: connect.dropTarget(),
+          isOver: monitor.isOver(),
+          canDrop: false,
+          draggedNode: dragged ? dragged.node : null,
+        };
+      }
     }
 
     return dropTarget(
@@ -290,15 +293,8 @@ export default class DndManager {
           minimumTreeIndex: 0,
           depth: 0,
         };
-        
-        try {
-          this.drop(result);
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log('wrapPlaceholder - drop - error');
-          // eslint-disable-next-line no-console
-          console.log(error);
-        }
+
+        this.drop(result);
 
         return result;
       },

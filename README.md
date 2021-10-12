@@ -1,3 +1,8 @@
+# This is fork of React Sortable Tree
+> important
+## ! Remember to build this project after making changes !
+> important
+
 <div align="center">
   <img src="https://cloud.githubusercontent.com/assets/4413963/18860410/26f64de8-84b8-11e6-9284-350308eed30a.png"/>
 </div>
