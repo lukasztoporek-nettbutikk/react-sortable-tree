@@ -1338,6 +1338,7 @@ function insertNode(_ref22) {
   });
 
   if (!('insertedTreeIndex' in insertResult)) {
+    // https://github.com/frontend-collective/react-sortable-tree/issues/259
     return {
       treeData: [newNode],
       treeIndex: 0,
@@ -2383,6 +2384,7 @@ function () {
           });
         } catch (error) {
           // temporary fix
+          // https://github.com/frontend-collective/react-sortable-tree/issues/259
           return false;
         }
 
@@ -2486,12 +2488,23 @@ function () {
 
       function nodeDropTargetPropInjection(connect, monitor) {
         var dragged = monitor.getItem();
-        return {
-          connectDropTarget: connect.dropTarget(),
-          isOver: monitor.isOver(),
-          canDrop: monitor.canDrop(),
-          draggedNode: dragged ? dragged.node : null
-        };
+
+        try {
+          return {
+            connectDropTarget: connect.dropTarget(),
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop(),
+            draggedNode: dragged ? dragged.node : null
+          };
+        } catch (error) {
+          // temporary fix for: Uncaught Error: Invariant Violation: Expected to find a valid target
+          return {
+            connectDropTarget: connect.dropTarget(),
+            isOver: monitor.isOver(),
+            canDrop: false,
+            draggedNode: dragged ? dragged.node : null
+          };
+        }
       }
 
       return reactDnd.DropTarget(this.dndType, nodeDropTarget, nodeDropTargetPropInjection)(el);

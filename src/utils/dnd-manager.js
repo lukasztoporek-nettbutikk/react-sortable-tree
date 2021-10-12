@@ -256,12 +256,22 @@ export default class DndManager {
 
     function nodeDropTargetPropInjection(connect, monitor) {
       const dragged = monitor.getItem();
-      return {
-        connectDropTarget: connect.dropTarget(),
-        isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
-        draggedNode: dragged ? dragged.node : null,
-      };
+      try {
+        return {
+          connectDropTarget: connect.dropTarget(),
+          isOver: monitor.isOver(),
+          canDrop: monitor.canDrop(),
+          draggedNode: dragged ? dragged.node : null,
+        };
+      } catch (error) {
+        // temporary fix for: Uncaught Error: Invariant Violation: Expected to find a valid target
+        return {
+          connectDropTarget: connect.dropTarget(),
+          isOver: monitor.isOver(),
+          canDrop: false,
+          draggedNode: dragged ? dragged.node : null,
+        };
+      }
     }
 
     return dropTarget(
