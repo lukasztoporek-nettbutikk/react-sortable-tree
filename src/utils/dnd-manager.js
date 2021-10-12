@@ -143,7 +143,11 @@ export default class DndManager {
           minimumTreeIndex: dropTargetProps.listIndex,
           expandParent: true,
         });
-
+      } catch (error) {
+        // temporary fix
+        // https://github.com/frontend-collective/react-sortable-tree/issues/259
+        return false
+      }
 
       return this.customCanDrop({
         node,
@@ -154,16 +158,6 @@ export default class DndManager {
         nextParent: addedResult.parentNode,
         nextTreeIndex: addedResult.treeIndex,
       });
-
-      } catch (error) {
-        
-        // eslint-disable-next-line no-console
-        console.log(error)
-        
-        // temporary fix
-        // https://github.com/frontend-collective/react-sortable-tree/issues/259
-        return false
-      }
     }
 
     return true;
@@ -223,8 +217,15 @@ export default class DndManager {
           depth: this.getTargetDepth(dropTargetProps, monitor, component),
         };
 
-        this.drop(result);
-
+        try {
+          this.drop(result);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log('wrapTarget - drop - error');
+          // eslint-disable-next-line no-console
+          console.log(error);
+        }
+        
         return result;
       },
 
@@ -289,8 +290,15 @@ export default class DndManager {
           minimumTreeIndex: 0,
           depth: 0,
         };
-
-        this.drop(result);
+        
+        try {
+          this.drop(result);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log('wrapPlaceholder - drop - error');
+          // eslint-disable-next-line no-console
+          console.log(error);
+        }
 
         return result;
       },
